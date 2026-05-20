@@ -41,11 +41,15 @@ def main():
     except EOFError:
         print("\nBłąd: Niespodziewany koniec wejścia. Zamykanie programu.")
         sys.exit(1)
+        
     try:
         rep = input("rep (matrix, list, table)> ").strip().lower()
         if rep not in ['matrix', 'list', 'table']:
              print("Nieznana reprezentacja. Ustawiono domyślnie: list")
              rep = 'list'
+             
+        graph.set_representation(rep)
+        
         while True:
             try:
                 action = input("action> ").strip().lower()
@@ -64,15 +68,15 @@ def main():
                     print(f"edge ({u},{v}) does not exist in the Graph")  
             elif action == "bfs":
                 start = int(input("start node> "))
-                print(" -> ".join(map(str, bfs(graph, start))))   
+                print(" -> ".join(map(str, bfs(graph.get_neighbors, start))))   
             elif action == "dfs":
                 start = int(input("start node> "))
-                print(" -> ".join(map(str, dfs(graph, start))))  
+                print(" -> ".join(map(str, dfs(graph.get_neighbors, start))))  
             elif action == "kahn":
-                res = kahn(graph)
+                res = kahn(graph.nodes, graph.get_neighbors)
                 if res: print("Topological sort (Kahn):", res)    
             elif action == "tarjan":
-                res = tarjan(graph)
+                res = tarjan(graph.nodes, graph.get_neighbors)
                 if res: print("Topological sort (Tarjan):", res)  
             elif action in ["exit", "quit", "q"]:
                 break
